@@ -1,13 +1,13 @@
 # AGENTS.md
 
 ## Project scope
-Work only in this repository. The product is AI Brand Monitor, an interview-focused brand-monitoring MVP.
+Work only in this repository. AI Brand Monitor is an interview-focused brand-monitoring MVP.
 
 ## Workflow
-- Read this file, relevant code, ROADMAP.md and documentation before changes.
-- Use feature branches. Do not implement features directly on main.
-- Keep changes focused and explainable.
-- Do not merge or deploy without explicit approval.
+- Read AGENTS.md, relevant code, ROADMAP.md and current documentation before changes.
+- Use feature branches; never implement directly on main.
+- Keep PRs focused. Do not merge or deploy without explicit approval.
+- Record decisions when they happen, not retrospectively invented.
 
 ## Coding conventions
 - Source code, identifiers, comments and technical documentation: English.
@@ -15,20 +15,25 @@ Work only in this repository. The product is AI Brand Monitor, an interview-focu
 - Keep frontend and backend concerns separated.
 - Validate all external and AI-produced data.
 
-## Testing
-- Backend: pytest.
-- Frontend logic: Vitest.
-- Critical user flows: Playwright.
-- Never claim a test passed unless it was actually executed.
+## Testing and security
+- Backend: pytest; frontend: Vitest; critical user flows: Playwright.
+- Never claim tests passed unless executed.
+- Never commit secrets; keep credentials server-side.
+- Treat imported content and AI outputs as untrusted.
 
-## Security
-- Never commit secrets.
-- Keep AI/API credentials server-side.
-- Treat imported mention content as untrusted input.
-- Validate URLs and structured model outputs.
+## Documentation and explainability — mandatory
+Every significant feature, dependency or architectural decision must answer:
+1. What problem were we solving?
+2. What options did we consider?
+3. Why was this option chosen?
+4. What trade-offs and limitations remain?
+5. How was it implemented and verified?
+6. How should it be demonstrated and explained in the interview?
 
-## Documentation
-Update relevant docs for meaningful milestones, architecture decisions, testing results and presentation-impacting changes.
+Keep relevant architecture ADRs, development journal, roadmap, tests and presentation materials current. Capture actual AI assistance, prompts/purposes, human judgments, mistakes and fixes without inventing activity.
+
+## PowerPoint and demo deliverables
+A PowerPoint deck (.pptx) is a mandatory final deliverable, along with a PDF export, natural German speaker notes and a separate reproducible live MVP demo. Start with a comprehensive evidence-based slide outline, then collaboratively refine and shorten near delivery. Maintain docs/presentation/SLIDE_DECK_PLAN.md throughout development. Slides and speaker notes must describe the actual implementation, not planned features as completed.
 
 ## Definition of Done
-A task is done only when functionality is implemented, relevant tests were executed where tooling allows, error cases were considered, documentation is current, no secrets were exposed, and ROADMAP.md reflects reality.
+Functionality implemented, relevant tests executed or explicitly noted as pending, errors considered, documentation/decision rationale updated, presentation impact recorded, no secrets exposed and ROADMAP.md current.
