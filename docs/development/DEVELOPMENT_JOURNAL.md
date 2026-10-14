@@ -74,3 +74,10 @@ This is intentionally not presented as an LLM. The limited heuristics can fail o
 - Every number comes from the fetched dataset; fictional example records are labeled.
 - ADR 0004 records the decision to start with client-side aggregation and its scalability trade-off.
 - Final CI and manual browser visual verification remain required. The daily-activity series is calculated but not yet visualized.
+
+## 2026-10-14 — Combined filters, activity and creation flow
+- Added reusable pure `filterMentions` with topic, priority, date range, sentiment, platform, action status, case-insensitive search and sorting. Vitest scenarios cover combined conditions, inclusive dates, and sort stability.
+- Added a data-derived daily activity display and manual sample-mention form backed by POST /api/mentions.
+- New fictional mentions use the real backend validation, SQLite storage and transparent deterministic analysis; the UI refreshes after creation.
+- All functionality remains on PR #1 without merge/deployment. ADR 0005 explains the lightweight design and trade-offs.
+- Latest CI head, visual QA and security audit need verification before claiming this milestone complete.
