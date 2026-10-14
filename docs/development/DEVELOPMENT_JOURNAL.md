@@ -66,3 +66,11 @@ A fresh CI result is still required. Do not mark the backend test suite as passe
 Implemented an English-only keyword-based service to classify relevance, sentiment, topic, urgency and priority, with explicit `method=deterministic`. New mentions submitted via POST are annotated, and the fictional seed data is classified using the same service. Added isolated tests for positive, negative support, unrelated, mixed and question cases.
 
 This is intentionally not presented as an LLM. The limited heuristics can fail on negations, sarcasm and ambiguous contexts; see ADR 0003. This work remains subject to latest CI verification.
+
+## 2026-10-14 — Data-driven monitoring UI
+- Introduced frontend API contract and Vite dev proxy.
+- Added derived metrics with Vitest coverage: total mentions, sentiment distribution, attention count, topic counts and daily activity data.
+- Added responsive dashboard cards, combined search/sentiment/platform/attention filters, expandable analysis details, source-link behavior, loading, retry and empty states.
+- Every number comes from the fetched dataset; fictional example records are labeled.
+- ADR 0004 records the decision to start with client-side aggregation and its scalability trade-off.
+- Final CI and manual browser visual verification remain required. The daily-activity series is calculated but not yet visualized.
