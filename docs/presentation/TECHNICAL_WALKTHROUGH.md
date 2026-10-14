@@ -26,3 +26,8 @@ The manual entry form sends a fictional mention through POST /api/mentions. Fast
 The user selects a JSON file containing a `mentions` array. The frontend checks the sample records and submits them to FastAPI. Pydantic validates the entire batch. Every record is classified using the transparent deterministic service, then inserted in a single SQLite transaction. The frontend refreshes the dashboard. JSON export preserves nested analysis metadata; CSV export flattens it into spreadsheet-friendly fields with basic formula-injection protection.
 
 Why this architecture: it demonstrates API contracts, validation, transactions and a complete user journey without needing unstable external platform integrations. It does not pretend that these examples are real social-media posts.
+
+## Provider architecture
+AI_PROVIDER=deterministic (default) uses local English-language rules. AI_PROVIDER=gemini selects a backend-only Gemini REST adapter with AI_API_KEY and AI_MODEL. A JSON response is validated against the Pydantic MentionAnalysis schema. Model metadata is always assigned by backend code, never trusted from the LLM. Errors or malformed results cause a labeled rule-based fallback.
+
+For the interview distinguish development with an AI coding assistant from real in-product model inference. Real Gemini behavior still needs a live credential-backed validation before presenting it as tested.
