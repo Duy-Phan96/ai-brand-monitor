@@ -52,3 +52,11 @@ def test_invalid_export_type_rejected():
 
 def test_empty_import_rejected():
     assert client.post("/api/mentions/import", json={"mentions": []}).status_code == 422
+
+
+def test_csv_export_escapes_formula_cells():
+    formula = {**row(), "content": "=HYPERLINK(\"https://example.test\",\"Click\")"}
+    assert client.post("/api/mentions/import", json={"mentions": [formula]}).status_code == 200
+    csv_response = client.get("/api/mentions/export?format=csv")
+    values = list(csv.DictReader(io.StringIO(csv_response.text)))
+    assert values[0]["content"].startswith("'=")
