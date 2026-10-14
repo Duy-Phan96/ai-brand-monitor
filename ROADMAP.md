@@ -32,8 +32,8 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and
 
 ## Phase 3 — AI integration
 - [ ] Evaluate current providers and costs
-- [ ] Implement provider-independent LLM analysis service (deterministic fallback implemented)
-- [ ] Structured and validated model output
+- [x] Implement optional provider adapter (Gemini) and deterministic fallback (live API validation pending)
+- [x] Structured JSON output validated with Pydantic (live validation pending)
 - [ ] Executive summaries
 - [x] Implement transparent deterministic fallback baseline (requires quality evaluation)
 - [ ] Optional local Ollama adapter
