@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel, Field
 
 from app.schemas.mentions import Mention, MentionCreate
-from app.services.analysis import analyze
+from app.services.llm import analyze_mention
 from app.services.mentions import import_mentions, list_mentions
 
 router = APIRouter(prefix="/api/mentions", tags=["transfer"])
@@ -26,7 +26,7 @@ def import_json(payload: ImportPayload) -> ImportResult:
     # Deliberately force all imports to remain sample data in the MVP.
     if any(not mention.is_sample for mention in payload.mentions):
         raise HTTPException(status_code=422, detail="Only fictional sample records may be imported")
-    records = [(m, analyze(m.brand, m.content)) for m in payload.mentions]
+    records = [(m, analyze_mention(m.brand, m.content)) for m in payload.mentions]
     return ImportResult(imported=import_mentions(records))
 
 
