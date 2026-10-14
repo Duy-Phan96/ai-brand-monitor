@@ -31,3 +31,21 @@ Expanded AGENTS.md Definition of Done and explanation requirements, added the .p
 
 ### Status
 Planning and documentation only. No .pptx has been produced yet; no presentation or demo has been performed.
+
+## 2026-10-14 — CI investigation and Phase 1 data foundation
+
+### Actual CI observation
+GitHub Actions run 38552078389: backend job succeeded including pytest; frontend failed during TypeScript build with TS5096. The node TypeScript configuration enabled allowImportingTsExtensions without noEmit/emitDeclarationOnly. Fixed by using noEmit and dropping the unnecessary option. The same run reported six npm audit advisories (three moderate, one high, two critical), requiring an audit and dependency review before release. Do not call this a passed run.
+
+### Implementation
+- Added Pydantic mention and analysis contracts with explicit validation and enumerations.
+- Added SQLite schema and service for create/list/get operations.
+- Added API routes and isolated database tests.
+- Added a representative fictional demo dataset and an idempotent non-destructive seed script.
+- Kept the analysis field optional until actual deterministic/LLM analysis is implemented, so no fake inference is presented.
+
+### Rationale
+Built-in SQLite reduces operational complexity and is adequate for a small demonstration. A JSON-serialized analysis payload is a temporary MVP choice; richer search/filtering may justify normalized fields or a migration later. This trade-off is documented in the next ADR.
+
+### Verification
+Implementation committed to the feature branch; CI must be rerun and checked. No test pass is claimed for these new changes yet.
