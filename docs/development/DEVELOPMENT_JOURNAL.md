@@ -81,3 +81,11 @@ This is intentionally not presented as an LLM. The limited heuristics can fail o
 - New fictional mentions use the real backend validation, SQLite storage and transparent deterministic analysis; the UI refreshes after creation.
 - All functionality remains on PR #1 without merge/deployment. ADR 0005 explains the lightweight design and trade-offs.
 - Latest CI head, visual QA and security audit need verification before claiming this milestone complete.
+
+## 2026-10-14 — JSON import and JSON/CSV export
+- Added POST /api/mentions/import using Pydantic validation and transactional SQLite insertion; only fictional sample records are permitted.
+- Added GET /api/mentions/export?format=json|csv returning stored records and analysis metadata.
+- Added upload and download controls to the React interface and import/export API tests.
+- Hardened CSV export against basic spreadsheet formula injection and added a regression test.
+- Decision rationale and limitations recorded in ADR 0006. Browser-level visual validation and a server-side request size ceiling are pending.
+- No merge or deployment performed.
