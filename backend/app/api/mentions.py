@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.schemas.mentions import Mention, MentionCreate
 from app.services import mentions as service
-from app.services.analysis import analyze
+from app.services.llm import analyze_mention
 
 router = APIRouter(prefix="/api/mentions", tags=["mentions"])
 
@@ -22,5 +22,5 @@ def get_mention(mention_id: int) -> Mention:
 
 @router.post("", response_model=Mention, status_code=status.HTTP_201_CREATED)
 def create_mention(mention: MentionCreate) -> Mention:
-    classification = analyze(mention.brand, mention.content)
+    classification = analyze_mention(mention.brand, mention.content)
     return service.create_mention(mention, analysis=classification)
