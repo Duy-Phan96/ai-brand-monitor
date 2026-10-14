@@ -16,3 +16,8 @@ This is a deliberately small architecture: ideal for proving the user workflow b
 
 ## Known constraints
 Full client-side retrieval is suitable only for the MVP. The dashboard does not yet implement every acceptance criterion. The current fallback uses conservative English-language rules, not an actual LLM. The fictional sample records have no external source URLs.
+
+## New interactive monitoring controls
+The frontend applies combined client-side filters against records returned from FastAPI. The filtering function is pure and independently tested. Users can constrain by content, sentiment, platform, topic, priority, action-needed status and publication date, then sort. Daily activity counts are derived directly from UTC publication dates.
+
+The manual entry form sends a fictional mention through POST /api/mentions. FastAPI validates the input, runs transparent deterministic analysis, stores the result in SQLite and returns the record. The dashboard reloads to show the updated counts. This makes a useful end-to-end interview demo; no live social-media ingestion is implied.
