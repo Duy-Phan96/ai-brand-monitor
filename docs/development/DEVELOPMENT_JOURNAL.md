@@ -103,3 +103,9 @@ This is intentionally not presented as an LLM. The limited heuristics can fail o
 - Added Pydantic validation, request timeout, model provenance set by the server, exception fallback and mocked integration tests.
 - No API key has been configured or committed. A live model call has not been demonstrated or claimed.
 - ADR 0008 records alternatives, financial/privacy trade-offs and verification gaps. CI must be checked for this commit.
+
+## 2026-10-14 — Classification evaluation baseline
+- Added 10 labeled fictional evaluation cases covering difficult situations including negation, German text, sarcasm and prompt-injection wording.
+- Implemented an offline evaluator for deterministic relevance, sentiment and action-needed accuracy and a test verifying its coverage.
+- Documented that this is a small illustrative dataset, not proof of production accuracy or evidence of live LLM performance.
+- See docs/testing/CLASSIFICATION_EVALUATION.md for the protocol and limitations.
