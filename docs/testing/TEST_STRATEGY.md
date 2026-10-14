@@ -25,3 +25,9 @@ Use Playwright for the final critical flow:
 
 ## Reporting rule
 Only executed tests may be reported as passed.
+
+## CI and packaging regression record (2026-10-14)
+- Initial frontend TypeScript build failed with TS5096; adjusted node tsconfig to noEmit. A subsequent GitHub Actions frontend job passed.
+- Backend editable installation failed after introducing a top-level data directory. Added an explicit setuptools package selection to prevent automatic detection of demo data as source package.
+- The packaging fix requires confirmation in a new workflow run.
+- The npm installation previously reported vulnerability advisories. Audit versions, affected packages and remediation before release rather than applying breaking upgrades blindly.
