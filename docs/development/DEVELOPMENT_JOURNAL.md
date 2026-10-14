@@ -60,3 +60,9 @@ Added explicit setuptools package discovery in `backend/pyproject.toml` to packa
 
 ### Verification
 A fresh CI result is still required. Do not mark the backend test suite as passed on this commit until CI completes.
+
+## 2026-10-14 — First deterministic analysis baseline
+
+Implemented an English-only keyword-based service to classify relevance, sentiment, topic, urgency and priority, with explicit `method=deterministic`. New mentions submitted via POST are annotated, and the fictional seed data is classified using the same service. Added isolated tests for positive, negative support, unrelated, mixed and question cases.
+
+This is intentionally not presented as an LLM. The limited heuristics can fail on negations, sarcasm and ambiguous contexts; see ADR 0003. This work remains subject to latest CI verification.
