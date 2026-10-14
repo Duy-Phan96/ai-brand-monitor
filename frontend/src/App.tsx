@@ -2,12 +2,13 @@ import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import {
   Alert, AppBar, Box, Button, Card, CardContent, Chip, CircularProgress,
-  Container, Divider, Stack, Toolbar, Typography,
+  Container, Divider, LinearProgress, Stack, Toolbar, Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchMentions, type Mention } from "./api";
 import { calculateMetrics, sentiments } from "./metrics";
 import { MentionFilters } from "./MentionFilters";
+import { MentionForm } from "./MentionForm";
 import { defaultFilters, filterMentions } from "./filtering";
 
 const sentimentColor = {
@@ -94,6 +95,28 @@ export function App() {
                   {Object.keys(metrics.topics).length === 0 && <Typography color="text.secondary">No analyzed mentions yet.</Typography>}
                 </CardContent></Card>
               </Box>
+              <Card variant="outlined"><CardContent>
+                <Typography variant="h6" gutterBottom>Mention activity over time</Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Published mentions per day (UTC), based on stored records
+                </Typography>
+                <Stack spacing={1}>
+                  {Object.entries(metrics.activity).sort(([a], [b]) => a.localeCompare(b)).map(([day, count]) => (
+                    <Stack key={day} direction="row" spacing={2} alignItems="center">
+                      <Typography variant="body2" sx={{ minWidth: 95 }}>{day}</Typography>
+                      <LinearProgress variant="determinate" value={metrics.total ? count / metrics.total * 100 : 0}
+                        sx={{ height: 10, borderRadius: 3, flex: 1 }} />
+                      <Typography variant="body2" sx={{ minWidth: 25, textAlign: "right" }}>{count}</Typography>
+                    </Stack>
+                  ))}
+                  {Object.keys(metrics.activity).length === 0 &&
+                    <Typography color="text.secondary">No activity to display.</Typography>}
+                </Stack>
+              </CardContent></Card>
+              <Card variant="outlined"><CardContent>
+                <Typography variant="h6" gutterBottom>Add mention</Typography>
+                <MentionForm onCreated={() => load()} />
+              </CardContent></Card>
               <Card variant="outlined"><CardContent>
                 <Typography variant="h6" gutterBottom>Mentions</Typography>
                 <MentionFilters filters={filters} onChange={setFilters} platforms={platforms} topics={topics} />
