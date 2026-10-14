@@ -2,14 +2,14 @@ import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import {
   Alert, AppBar, Box, Button, Card, CardContent, Chip, CircularProgress,
-  Container, Divider, FormControl, InputLabel, MenuItem, Select, Stack,
-  TextField, Toolbar, Typography,
+  Container, Divider, Stack, Toolbar, Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchMentions, type Mention } from "./api";
 import { calculateMetrics, sentiments } from "./metrics";
+import { MentionFilters } from "./MentionFilters";
+import { defaultFilters, filterMentions } from "./filtering";
 
-const sentimentOptions = ["all", ...sentiments] as const;
 const sentimentColor = {
   positive: "success", negative: "error", neutral: "default", mixed: "warning",
 } as const;
@@ -19,10 +19,7 @@ export function App() {
   const [selected, setSelected] = useState<Mention | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [sentiment, setSentiment] = useState<string>("all");
-  const [platform, setPlatform] = useState("all");
-  const [actionOnly, setActionOnly] = useState(false);
+  const [filters, setFilters] = useState(defaultFilters);
 
   const load = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
@@ -45,12 +42,8 @@ export function App() {
 
   const metrics = useMemo(() => calculateMetrics(mentions), [mentions]);
   const platforms = useMemo(() => [...new Set(mentions.map(m => m.platform))].sort(), [mentions]);
-  const filtered = useMemo(() => mentions.filter(m =>
-    (sentiment === "all" || m.analysis?.sentiment === sentiment) &&
-    (platform === "all" || m.platform === platform) &&
-    (!actionOnly || m.analysis?.action_required) &&
-    (`${m.brand} ${m.content} ${m.platform}`.toLowerCase().includes(search.toLowerCase()))
-  ), [mentions, search, sentiment, platform, actionOnly]);
+  const topics = useMemo(() => [...new Set(mentions.map(m => m.analysis?.topic).filter((t): t is string => Boolean(t)))].sort(), [mentions]);
+  const filtered = useMemo(() => filterMentions(mentions, filters), [mentions, filters]);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
@@ -103,24 +96,10 @@ export function App() {
               </Box>
               <Card variant="outlined"><CardContent>
                 <Typography variant="h6" gutterBottom>Mentions</Typography>
-                <Stack direction={{xs:"column",md:"row"}} gap={2} sx={{mb:2}}>
-                  <TextField size="small" label="Search mentions" value={search} onChange={e=>setSearch(e.target.value)} sx={{flex:1}} />
-                  <FormControl size="small" sx={{minWidth:150}}>
-                    <InputLabel id="sentiment-label">Sentiment</InputLabel>
-                    <Select labelId="sentiment-label" label="Sentiment" value={sentiment} onChange={e=>setSentiment(e.target.value)}>
-                      {sentimentOptions.map(s=><MenuItem value={s} key={s}>{s === "all" ? "All sentiments" : s}</MenuItem>)}
-                    </Select>
-                  </FormControl>
-                  <FormControl size="small" sx={{minWidth:150}}>
-                    <InputLabel id="platform-label">Platform</InputLabel>
-                    <Select labelId="platform-label" label="Platform" value={platform} onChange={e=>setPlatform(e.target.value)}>
-                      <MenuItem value="all">All platforms</MenuItem>
-                      {platforms.map(p=><MenuItem value={p} key={p}>{p}</MenuItem>)}
-                    </Select>
-                  </FormControl>
-                  <Button variant={actionOnly ? "contained" : "outlined"} onClick={()=>setActionOnly(v=>!v)}>Needs attention</Button>
-                  <Button onClick={()=>{setSearch("");setSentiment("all");setPlatform("all");setActionOnly(false);}}>Reset</Button>
-                </Stack>
+                <MentionFilters filters={filters} onChange={setFilters} platforms={platforms} topics={topics} />
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Showing {filtered.length} of {mentions.length} mentions
+                </Typography>
                 {filtered.length===0 ? <Alert severity="info">No mentions match the current filters. Clear filters or add sample data through the seed command.</Alert> :
                 <Stack divider={<Divider flexItem />} gap={1}>
                   {filtered.map(m=><Box key={m.id} sx={{py:1}}>
