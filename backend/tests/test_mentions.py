@@ -31,7 +31,7 @@ def test_create_list_and_get_mention() -> None:
     assert response.status_code == 201
     created = response.json()
     assert created["id"] == 1
-    assert created["analysis"] is None
+    assert created["analysis"]["method"] == "deterministic"
     assert created["is_sample"] is True
     assert len(client.get("/api/mentions").json()) == 1
     assert client.get("/api/mentions/1").json()["content"] == sample_payload()["content"]
