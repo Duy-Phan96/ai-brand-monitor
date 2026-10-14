@@ -49,3 +49,14 @@ Built-in SQLite reduces operational complexity and is adequate for a small demon
 
 ### Verification
 Implementation committed to the feature branch; CI must be rerun and checked. No test pass is claimed for these new changes yet.
+
+## 2026-10-14 — Follow-up CI debugging
+
+### Observed
+Latest completed CI run 38553101488: frontend job passed (including build and Vitest), backend installation failed before pytest. Setuptools reported multiple top-level packages discovered in flat layout: `app` and `data`.
+
+### Fix
+Added explicit setuptools package discovery in `backend/pyproject.toml` to package only `app*`, excluding data, scripts and tests. This prevents sample data from being interpreted as Python application code.
+
+### Verification
+A fresh CI result is still required. Do not mark the backend test suite as passed on this commit until CI completes.
