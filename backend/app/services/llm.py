@@ -8,6 +8,10 @@ import json
 import os
 
 import httpx
+from dotenv import load_dotenv
+from pathlib import Path
+
+load_dotenv(Path(__file__).resolve().parents[3] / '.env', override=False)
 from pydantic import ValidationError
 
 from app.schemas.mentions import AnalysisMethod, MentionAnalysis
