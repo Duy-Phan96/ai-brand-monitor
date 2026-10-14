@@ -9,7 +9,6 @@ from pathlib import Path
 from app.core.database import connect, database_path, initialize_database
 from app.schemas.mentions import MentionCreate
 from app.services.analysis import analyze
-from app.services.mentions import import_mentions
 
 
 def reset_demo() -> int:
@@ -26,7 +25,25 @@ def reset_demo() -> int:
         if non_samples:
             raise RuntimeError("Refusing reset: database contains non-sample records")
         connection.execute("DELETE FROM mentions WHERE is_sample = 1")
-    return import_mentions([(m, analyze(m.brand, m.content)) for m in samples])
+        connection.executemany(
+            """INSERT INTO mentions (
+                brand, content, platform, published_at, source_url,
+                is_sample, analysis_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            [
+                (
+                    item.brand,
+                    item.content,
+                    item.platform,
+                    item.published_at.isoformat(),
+                    str(item.source_url) if item.source_url else None,
+                    1,
+                    analyze(item.brand, item.content).model_dump_json(),
+                )
+                for item in samples
+            ],
+        )
+    return len(samples)
 
 
 def main() -> None:
