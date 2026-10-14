@@ -1,40 +1,156 @@
 import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import {
-  AppBar,
-  Box,
-  Chip,
-  Container,
-  Stack,
-  Toolbar,
-  Typography,
+  Alert, AppBar, Box, Button, Card, CardContent, Chip, CircularProgress,
+  Container, Divider, FormControl, InputLabel, MenuItem, Select, Stack,
+  TextField, Toolbar, Typography,
 } from "@mui/material";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { fetchMentions, type Mention } from "./api";
+import { calculateMetrics, sentiments } from "./metrics";
+
+const sentimentOptions = ["all", ...sentiments] as const;
+const sentimentColor = {
+  positive: "success", negative: "error", neutral: "default", mixed: "warning",
+} as const;
 
 export function App() {
+  const [mentions, setMentions] = useState<Mention[]>([]);
+  const [selected, setSelected] = useState<Mention | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [sentiment, setSentiment] = useState<string>("all");
+  const [platform, setPlatform] = useState("all");
+  const [actionOnly, setActionOnly] = useState(false);
+
+  const load = useCallback(async (signal?: AbortSignal) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchMentions(signal);
+      if (!signal?.aborted) setMentions(data);
+    } catch (cause) {
+      if (!signal?.aborted) setError(cause instanceof Error ? cause.message : "Failed to load mentions");
+    } finally {
+      if (!signal?.aborted) setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void load(controller.signal);
+    return () => controller.abort();
+  }, [load]);
+
+  const metrics = useMemo(() => calculateMetrics(mentions), [mentions]);
+  const platforms = useMemo(() => [...new Set(mentions.map(m => m.platform))].sort(), [mentions]);
+  const filtered = useMemo(() => mentions.filter(m =>
+    (sentiment === "all" || m.analysis?.sentiment === sentiment) &&
+    (platform === "all" || m.platform === platform) &&
+    (!actionOnly || m.analysis?.action_required) &&
+    (`${m.brand} ${m.content} ${m.platform}`.toLowerCase().includes(search.toLowerCase()))
+  ), [mentions, search, sentiment, platform, actionOnly]);
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <InsightsRoundedIcon sx={{ mr: 1.5 }} />
-          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-            AI Brand Monitor
-          </Typography>
-          <Chip label="MVP foundation" size="small" variant="outlined" />
+          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>AI Brand Monitor</Typography>
+          <Chip label="Sample-data MVP" size="small" variant="outlined" />
         </Toolbar>
       </AppBar>
-
-      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
-        <Stack spacing={2} maxWidth={720}>
-          <Typography variant="overline" color="primary">
-            Brand intelligence workspace
-          </Typography>
-          <Typography variant="h3" component="h2" fontWeight={700}>
-            Turn online mentions into clear next actions.
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            The application foundation is ready. Dashboard metrics, mention
-            workflows and transparent analysis will be implemented in the next
-            milestones.
-          </Typography>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+        <Stack spacing={3}>
+          <Box>
+            <Typography variant="overline" color="primary">Brand intelligence workspace</Typography>
+            <Typography variant="h4" component="h2" fontWeight={700}>Monitoring overview</Typography>
+            <Typography color="text.secondary">Insights calculated from stored mentions. Sample records are fictional.</Typography>
+          </Box>
+          {error && <Alert severity="error" action={<Button onClick={() => void load()} color="inherit">Retry</Button>}>Unable to load dashboard: {error}</Alert>}
+          {loading ? <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}><CircularProgress aria-label="Loading mentions" /></Box> : (
+            <>
+              <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr 1fr", md: "repeat(4, 1fr)" }, gap: 2 }}>
+                {[
+                  ["Mentions", metrics.total], ["Positive", metrics.counts.positive],
+                  ["Negative", metrics.counts.negative], ["Needs attention", metrics.actionRequired],
+                ].map(([label, value]) => (
+                  <Card variant="outlined" key={label}>
+                    <CardContent>
+                      <Typography color="text.secondary" variant="body2">{label}</Typography>
+                      <Typography variant="h4" fontWeight={700}>{value}</Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Box>
+              <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2 }}>
+                <Card variant="outlined"><CardContent>
+                  <Typography variant="h6" gutterBottom>Sentiment distribution</Typography>
+                  <Stack spacing={1}>{sentiments.map(s => (
+                    <Stack key={s} direction="row" justifyContent="space-between">
+                      <Typography sx={{ textTransform: "capitalize" }}>{s}</Typography><Typography fontWeight={600}>{metrics.counts[s]}</Typography>
+                    </Stack>
+                  ))}</Stack>
+                </CardContent></Card>
+                <Card variant="outlined"><CardContent>
+                  <Typography variant="h6" gutterBottom>Top topics</Typography>
+                  <Stack spacing={1}>{Object.entries(metrics.topics).sort((a,b) => b[1]-a[1]).slice(0,5).map(([topic,count]) =>
+                    <Stack key={topic} direction="row" justifyContent="space-between"><Typography>{topic}</Typography><Typography fontWeight={600}>{count}</Typography></Stack>
+                  )}</Stack>
+                  {Object.keys(metrics.topics).length === 0 && <Typography color="text.secondary">No analyzed mentions yet.</Typography>}
+                </CardContent></Card>
+              </Box>
+              <Card variant="outlined"><CardContent>
+                <Typography variant="h6" gutterBottom>Mentions</Typography>
+                <Stack direction={{xs:"column",md:"row"}} gap={2} sx={{mb:2}}>
+                  <TextField size="small" label="Search mentions" value={search} onChange={e=>setSearch(e.target.value)} sx={{flex:1}} />
+                  <FormControl size="small" sx={{minWidth:150}}>
+                    <InputLabel id="sentiment-label">Sentiment</InputLabel>
+                    <Select labelId="sentiment-label" label="Sentiment" value={sentiment} onChange={e=>setSentiment(e.target.value)}>
+                      {sentimentOptions.map(s=><MenuItem value={s} key={s}>{s === "all" ? "All sentiments" : s}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                  <FormControl size="small" sx={{minWidth:150}}>
+                    <InputLabel id="platform-label">Platform</InputLabel>
+                    <Select labelId="platform-label" label="Platform" value={platform} onChange={e=>setPlatform(e.target.value)}>
+                      <MenuItem value="all">All platforms</MenuItem>
+                      {platforms.map(p=><MenuItem value={p} key={p}>{p}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                  <Button variant={actionOnly ? "contained" : "outlined"} onClick={()=>setActionOnly(v=>!v)}>Needs attention</Button>
+                  <Button onClick={()=>{setSearch("");setSentiment("all");setPlatform("all");setActionOnly(false);}}>Reset</Button>
+                </Stack>
+                {filtered.length===0 ? <Alert severity="info">No mentions match the current filters. Clear filters or add sample data through the seed command.</Alert> :
+                <Stack divider={<Divider flexItem />} gap={1}>
+                  {filtered.map(m=><Box key={m.id} sx={{py:1}}>
+                    <Stack direction="row" flexWrap="wrap" alignItems="center" gap={1} sx={{mb:1}}>
+                      <Typography fontWeight={600}>{m.brand}</Typography>
+                      <Chip size="small" label={m.platform} variant="outlined" />
+                      {m.analysis && <Chip size="small" label={m.analysis.sentiment} color={sentimentColor[m.analysis.sentiment]} />}
+                      {m.analysis?.action_required && <Chip size="small" label={m.analysis.priority + " priority"} color="warning" />}
+                      {m.is_sample && <Chip size="small" label="Fictional sample" variant="outlined" />}
+                    </Stack>
+                    <Typography variant="body2">{m.content}</Typography>
+                    <Button size="small" onClick={()=>setSelected(selected?.id===m.id?null:m)} sx={{mt:1}}>
+                      {selected?.id===m.id?"Hide details":"View analysis"}
+                    </Button>
+                    {selected?.id===m.id && <Box sx={{bgcolor:"action.hover",p:2,borderRadius:2,mt:1}}>
+                      {m.analysis ? <Stack spacing={1}>
+                        <Typography variant="body2"><strong>Topic:</strong> {m.analysis.topic}</Typography>
+                        <Typography variant="body2"><strong>Relevant:</strong> {m.analysis.relevant?"Yes":"No"}</Typography>
+                        <Typography variant="body2"><strong>Analysis:</strong> {m.analysis.explanation}</Typography>
+                        <Typography variant="body2"><strong>Recommendation:</strong> {m.analysis.suggested_action??"No action suggested"}</Typography>
+                        <Typography variant="caption" color="text.secondary">Method: {m.analysis.method}{m.analysis.model_name?` (${m.analysis.model_name})`:""}</Typography>
+                      </Stack> : <Typography>Not analyzed</Typography>}
+                      {m.source_url ? <Button href={m.source_url} target="_blank" rel="noopener noreferrer">Open source</Button> : <Typography variant="caption" display="block" color="text.secondary">No original source link (fictional example).</Typography>}
+                    </Box>}
+                  </Box>)}
+                </Stack>}
+              </CardContent></Card>
+              <Button startIcon={<RefreshRoundedIcon />} onClick={()=>void load()} sx={{alignSelf:"flex-start"}}>Refresh</Button>
+            </>
+          )}
         </Stack>
       </Container>
     </Box>
