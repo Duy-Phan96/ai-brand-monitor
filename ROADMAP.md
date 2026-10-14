@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Current status
-Phase 0 is being completed and Phase 1 has started.
+Phase 0 documentation baseline is established; Phase 1 code has been scaffolded. CI verification is pending.
 
 ## Phase 0 — Project initialization
 - [x] Confirm MVP purpose and assignment constraints
@@ -12,13 +12,13 @@ Phase 0 is being completed and Phase 1 has started.
 - [ ] Verify CI on the first implementation PR
 
 ## Phase 1 — Application foundation
-- [ ] Bootstrap React + TypeScript + Vite frontend
-- [ ] Bootstrap FastAPI backend
+- [x] Bootstrap React + TypeScript + Vite frontend (scaffold; build verification pending)
+- [x] Bootstrap FastAPI backend (scaffold; tests pending)
 - [ ] Define mention and analysis schemas
 - [ ] Add SQLite persistence
 - [ ] Add reproducible demo-data seeding
-- [ ] Add responsive application shell
-- [ ] Add baseline unit/API tests
+- [x] Add initial responsive application shell (manual responsive verification pending)
+- [ ] Verify baseline unit/API tests in CI
 
 ## Phase 2 — Core monitoring
 - [ ] Dashboard
@@ -52,13 +52,17 @@ Phase 0 is being completed and Phase 1 has started.
 - [ ] Demo reliability check
 - [ ] Documentation audit
 
-## Phase 6 — Interview preparation
-- [ ] Freeze stable demo
-- [ ] Complete presentation guide
-- [ ] Complete live demo script
-- [ ] Prepare technical Q&A
-- [ ] Review AI-development process
-- [ ] Practice complete walkthrough
+## Phase 6 — Interview deliverables
+- [ ] Freeze stable MVP demonstration
+- [ ] Maintain comprehensive slide deck plan with evidence and justifications
+- [ ] Create complete PowerPoint presentation (.pptx)
+- [ ] Export PDF presentation
+- [ ] Create natural German speaker notes and presentation guide
+- [ ] Complete live MVP demonstration script and fallback
+- [ ] Complete technical interview Q&A
+- [ ] Review and explain actual AI-assisted development process
+- [ ] Collaboratively trim and polish the deck only after the comprehensive draft
+- [ ] Rehearse presentation followed by live demo
 
 ## Bonus — only after stable MVP
 - Live Reddit integration
