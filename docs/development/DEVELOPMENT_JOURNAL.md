@@ -89,3 +89,10 @@ This is intentionally not presented as an LLM. The limited heuristics can fail o
 - Hardened CSV export against basic spreadsheet formula injection and added a regression test.
 - Decision rationale and limitations recorded in ADR 0006. Browser-level visual validation and a server-side request size ceiling are pending.
 - No merge or deployment performed.
+
+## 2026-10-14 — Reproducible demo reset
+- Added `python -m scripts.reset_demo --confirm` for explicit resetting of fictional local dataset.
+- The reset refuses any database containing a non-sample record and replaces fictional data transactionally.
+- Tests cover reset repeatability and refusing destructive changes to non-sample data.
+- ADR 0007 records the choice of a CLI command over an unauthenticated destructive HTTP endpoint.
+- CI verification of the latest changes remains pending.
