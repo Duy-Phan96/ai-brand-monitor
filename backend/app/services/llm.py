@@ -52,7 +52,7 @@ def _gemini_analyze(brand: str, content: str) -> MentionAnalysis:
         },
     }
     with httpx.Client(timeout=12.0) as client:
-        response = client.post(url, params={"key": key}, json=payload)
+        response = client.post(url, headers={"x-goog-api-key": key}, json=payload)
         response.raise_for_status()
         result = response.json()
     raw = result["candidates"][0]["content"]["parts"][0]["text"]
