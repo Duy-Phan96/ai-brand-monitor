@@ -82,3 +82,9 @@ All seeded examples are fictional. They contain no invented authentic-looking so
 ## Documentation
 
 See `ROADMAP.md`, `AGENTS.md`, `docs/architecture/`, `docs/decisions/`, `docs/development/` and `docs/presentation/`. A documented PowerPoint deck, PDF, German speaker notes and separate MVP demo are required final deliverables.
+
+## Optional Gemini analysis (local only)
+
+The default is offline deterministic analysis. To enable Gemini using your existing free-tier AI Studio key, follow `docs/development/GEMINI_LOCAL_SETUP.md`. Copy the repository-root `.env.example` to an untracked root `.env`, set `AI_PROVIDER=gemini`, `AI_MODEL=gemini-2.5-flash` and your own `AI_API_KEY`. Do not paste or commit the key. Verify the project remains on Google's Free tier; never enable billing just for the demo.
+
+The backend loads this local environment file without overriding environment variables already set in the process. A successful validated provider response is marked `method=llm`; errors fall back to `method=deterministic`. No credential-backed live test has been completed yet.
