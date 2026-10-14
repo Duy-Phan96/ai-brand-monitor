@@ -20,7 +20,7 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and
 - [x] Add fictional demo data and repeatable seed command (verification pending)
 - [x] Add initial responsive application shell (manual checks pending)
 - [x] Verify updated unit/API tests in CI (successful on run 38554210778)
-- [ ] Add explicit database migration/reset approach
+- [x] Add explicit safe demo reset CLI (database migrations remain future work)
 
 ## Phase 2 — Core monitoring
 - [x] Initial data-derived dashboard (manual UI verification pending)
