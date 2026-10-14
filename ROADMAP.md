@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Current status
-Phase 0 documentation baseline is established; Phase 1 code has been scaffolded. CI verification is pending.
+Phase 1 implementation is in progress on `feat/project-foundation`. Initial backend CI passed before new data-model changes; frontend build failed due to TypeScript configuration and a fix is committed but not yet verified.
 
 ## Phase 0 — Project initialization
 - [x] Confirm MVP purpose and assignment constraints
@@ -9,16 +9,18 @@ Phase 0 documentation baseline is established; Phase 1 code has been scaffolded.
 - [x] Establish repository workflow and engineering rules
 - [x] Define MVP scope and acceptance criteria
 - [x] Create initial documentation baseline
-- [ ] Verify CI on the first implementation PR
+- [ ] Verify complete CI on the first implementation PR
+- [ ] Audit npm dependency advisories
 
 ## Phase 1 — Application foundation
-- [x] Bootstrap React + TypeScript + Vite frontend (scaffold; build verification pending)
-- [x] Bootstrap FastAPI backend (scaffold; tests pending)
-- [ ] Define mention and analysis schemas
-- [ ] Add SQLite persistence
-- [ ] Add reproducible demo-data seeding
-- [x] Add initial responsive application shell (manual responsive verification pending)
-- [ ] Verify baseline unit/API tests in CI
+- [x] Bootstrap React + TypeScript + Vite frontend (verification pending)
+- [x] Bootstrap FastAPI backend
+- [x] Define mention and analysis schemas (verification pending)
+- [x] Add basic SQLite persistence (verification pending)
+- [x] Add fictional demo data and repeatable seed command (verification pending)
+- [x] Add initial responsive application shell (manual checks pending)
+- [ ] Verify updated unit/API tests in CI
+- [ ] Add explicit database migration/reset approach
 
 ## Phase 2 — Core monitoring
 - [ ] Dashboard
