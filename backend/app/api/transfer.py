@@ -3,7 +3,7 @@ import io
 import json
 
 from fastapi import APIRouter, HTTPException, Response
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field
 
 from app.schemas.mentions import Mention, MentionCreate
 from app.services.analysis import analyze
@@ -11,7 +11,6 @@ from app.services.mentions import import_mentions, list_mentions
 
 router = APIRouter(prefix="/api/mentions", tags=["transfer"])
 MAX_RECORDS = 500
-MAX_BYTES = 1_000_000
 
 
 class ImportPayload(BaseModel):
@@ -52,7 +51,12 @@ def export_mentions(format: str = "json") -> Response:
         for mention in mentions:
             base = mention.model_dump(mode="json", exclude={"analysis"})
             analysis = mention.analysis.model_dump(mode="json") if mention.analysis else {}
-            writer.writerow({**base, **analysis})
+            record = {**base, **analysis}
+            # Prevent CSV formula injection when exported data is opened in spreadsheets.
+            for key, value in record.items():
+                if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")):
+                    record[key] = "'" + value
+            writer.writerow(record)
         return Response(out.getvalue(), media_type="text/csv; charset=utf-8",
                         headers={"Content-Disposition": 'attachment; filename="mentions.csv"'})
     raise HTTPException(status_code=422, detail="Supported export formats: json, csv")
