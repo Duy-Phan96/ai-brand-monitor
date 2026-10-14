@@ -71,3 +71,28 @@ def count_mentions() -> int:
     initialize_database()
     with connect() as connection:
         return int(connection.execute("SELECT COUNT(*) FROM mentions").fetchone()[0])
+
+
+def import_mentions(records: list[tuple[MentionCreate, MentionAnalysis]]) -> int:
+    """Store one validated batch atomically."""
+    initialize_database()
+    with connect() as connection:
+        connection.executemany(
+            """INSERT INTO mentions (
+                brand, content, platform, published_at, source_url,
+                is_sample, analysis_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            [
+                (
+                    mention.brand,
+                    mention.content,
+                    mention.platform,
+                    mention.published_at.isoformat(),
+                    str(mention.source_url) if mention.source_url else None,
+                    int(mention.is_sample),
+                    analysis.model_dump_json(),
+                )
+                for mention, analysis in records
+            ],
+        )
+    return len(records)
