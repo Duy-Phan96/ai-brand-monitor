@@ -109,3 +109,9 @@ This is intentionally not presented as an LLM. The limited heuristics can fail o
 - Implemented an offline evaluator for deterministic relevance, sentiment and action-needed accuracy and a test verifying its coverage.
 - Documented that this is a small illustrative dataset, not proof of production accuracy or evidence of live LLM performance.
 - See docs/testing/CLASSIFICATION_EVALUATION.md for the protocol and limitations.
+
+## 2026-10-14 — Free-tier Gemini configuration confirmed by product owner
+- Product owner selected existing Gemini AI Studio free-tier project/key and approved using it without enabling billing.
+- Added local dotenv loading in the backend, a configuration example and Windows local setup instructions.
+- Real API key remains with the product owner, never in Git; there has been no credential-backed live verification.
+- Free-tier limits, privacy conditions, costs and user setup are documented transparently. The next acceptance check needs the user to configure their key locally and inspect method provenance.
