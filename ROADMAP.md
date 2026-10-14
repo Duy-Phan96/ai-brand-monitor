@@ -25,9 +25,9 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and
 ## Phase 2 — Core monitoring
 - [x] Initial data-derived dashboard (manual UI verification pending)
 - [x] Mention list and expandable detail view (browser verification pending)
-- [ ] Complete combined search, filters and sorting (text, sentiment, platform and attention implemented; remaining filters pending)
+- [x] Combined search, filters and sorting (text, sentiment, platform, topic, priority, attention, dates; CI and browser verification tracked separately)
 - [x] Source-link behavior with missing-link fallback (browser verification pending)
-- [ ] Manual mention creation
+- [x] Manual fictional mention creation through backend API (browser QA pending)
 - [ ] Import/export
 
 ## Phase 3 — AI integration
