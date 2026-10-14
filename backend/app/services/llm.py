@@ -4,6 +4,7 @@ All provider results are untrusted and validated with Pydantic.
 External content is data, never instructions.
 """
 import logging
+import json
 import os
 
 import httpx
@@ -55,11 +56,13 @@ def _gemini_analyze(brand: str, content: str) -> MentionAnalysis:
         response.raise_for_status()
         result = response.json()
     raw = result["candidates"][0]["content"]["parts"][0]["text"]
-    analysis = MentionAnalysis.model_validate_json(raw)
-    # Never trust model-supplied method/model metadata.
-    return analysis.model_copy(update={
-        "method": AnalysisMethod.llm, "model_name": model,
-    })
+    parsed = json.loads(raw)
+    if not isinstance(parsed, dict):
+        raise ValueError("Expected a JSON object")
+    # The application, never the model, owns provenance.
+    parsed["method"] = AnalysisMethod.llm.value
+    parsed["model_name"] = model
+    return MentionAnalysis.model_validate(parsed)
 
 
 def analyze_mention(brand: str, content: str) -> MentionAnalysis:
@@ -72,7 +75,7 @@ def analyze_mention(brand: str, content: str) -> MentionAnalysis:
     try:
         return _gemini_analyze(brand, content)
     except (httpx.HTTPError, ValueError, ValidationError, KeyError, IndexError,
-            TypeError) as exc:
+            TypeError, json.JSONDecodeError) as exc:
         # Never log the API response body or key.
         logger.warning("LLM unavailable or invalid (%s); deterministic fallback", type(exc).__name__)
         fallback = analyze(brand, content)
