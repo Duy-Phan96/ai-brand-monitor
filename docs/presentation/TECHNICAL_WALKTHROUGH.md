@@ -31,3 +31,6 @@ Why this architecture: it demonstrates API contracts, validation, transactions a
 AI_PROVIDER=deterministic (default) uses local English-language rules. AI_PROVIDER=gemini selects a backend-only Gemini REST adapter with AI_API_KEY and AI_MODEL. A JSON response is validated against the Pydantic MentionAnalysis schema. Model metadata is always assigned by backend code, never trusted from the LLM. Errors or malformed results cause a labeled rule-based fallback.
 
 For the interview distinguish development with an AI coding assistant from real in-product model inference. Real Gemini behavior still needs a live credential-backed validation before presenting it as tested.
+
+## Classifier evaluation
+The deterministic fallback can be evaluated offline with `python -m scripts.evaluate_analysis`. The labeled cases include easy inputs and edge cases, illustrating the trade-off between transparent rules and language understanding. Describe actual test results and limitations rather than a marketing accuracy figure. A live Gemini comparison remains unverified.
