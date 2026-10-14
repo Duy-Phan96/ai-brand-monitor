@@ -21,3 +21,8 @@ Full client-side retrieval is suitable only for the MVP. The dashboard does not 
 The frontend applies combined client-side filters against records returned from FastAPI. The filtering function is pure and independently tested. Users can constrain by content, sentiment, platform, topic, priority, action-needed status and publication date, then sort. Daily activity counts are derived directly from UTC publication dates.
 
 The manual entry form sends a fictional mention through POST /api/mentions. FastAPI validates the input, runs transparent deterministic analysis, stores the result in SQLite and returns the record. The dashboard reloads to show the updated counts. This makes a useful end-to-end interview demo; no live social-media ingestion is implied.
+
+## JSON import/export walkthrough
+The user selects a JSON file containing a `mentions` array. The frontend checks the sample records and submits them to FastAPI. Pydantic validates the entire batch. Every record is classified using the transparent deterministic service, then inserted in a single SQLite transaction. The frontend refreshes the dashboard. JSON export preserves nested analysis metadata; CSV export flattens it into spreadsheet-friendly fields with basic formula-injection protection.
+
+Why this architecture: it demonstrates API contracts, validation, transactions and a complete user journey without needing unstable external platform integrations. It does not pretend that these examples are real social-media posts.
