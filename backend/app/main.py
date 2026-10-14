@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.mentions import router as mentions_router
+from app.api.transfer import router as transfer_router
 from app.schemas.health import HealthResponse
 
 app = FastAPI(
@@ -9,6 +10,7 @@ app = FastAPI(
     description="Backend API for the AI Brand Monitor MVP.",
 )
 
+app.include_router(transfer_router)
 app.include_router(mentions_router)
 
 
