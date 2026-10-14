@@ -23,10 +23,10 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and
 - [ ] Add explicit database migration/reset approach
 
 ## Phase 2 — Core monitoring
-- [ ] Dashboard
-- [ ] Mention list and detail view
-- [ ] Search, filters and sorting
-- [ ] Source links
+- [x] Initial data-derived dashboard (manual UI verification pending)
+- [x] Mention list and expandable detail view (browser verification pending)
+- [ ] Complete combined search, filters and sorting (text, sentiment, platform and attention implemented; remaining filters pending)
+- [x] Source-link behavior with missing-link fallback (browser verification pending)
 - [ ] Manual mention creation
 - [ ] Import/export
 
