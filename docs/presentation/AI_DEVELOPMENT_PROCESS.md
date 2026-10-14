@@ -14,3 +14,6 @@ The application must distinguish:
 - human decisions
 
 Simulated results must never be presented as genuine model inference.
+
+## Model-provider configuration choice
+A real runtime LLM provider can be enabled via an untracked local environment file. The developer chose to reuse an existing Google AI Studio Free-tier project instead of opening billing. The application defaults to offline classification and only labels validated live provider responses as actual LLM output. Do not claim that the real Gemini connection was tested until a credential-backed test has been performed and recorded.
