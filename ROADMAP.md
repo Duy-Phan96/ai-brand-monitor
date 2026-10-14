@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Current status
-Phase 1 implementation is in progress on `feat/project-foundation`. Initial backend CI passed before new data-model changes; frontend build failed due to TypeScript configuration and a fix is committed but not yet verified.
+Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and backend CI passed on a recent commit; further documentation commits still require latest final verification.
 
 ## Phase 0 — Project initialization
 - [x] Confirm MVP purpose and assignment constraints
@@ -9,7 +9,7 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Initial back
 - [x] Establish repository workflow and engineering rules
 - [x] Define MVP scope and acceptance criteria
 - [x] Create initial documentation baseline
-- [ ] Verify complete CI on the first implementation PR
+- [x] Verify complete CI on the first implementation PR (both jobs successful on run 38554210778; final PR head remains to be checked)
 - [ ] Audit npm dependency advisories
 
 ## Phase 1 — Application foundation
@@ -19,7 +19,7 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Initial back
 - [x] Add basic SQLite persistence (verification pending)
 - [x] Add fictional demo data and repeatable seed command (verification pending)
 - [x] Add initial responsive application shell (manual checks pending)
-- [ ] Verify updated unit/API tests in CI
+- [x] Verify updated unit/API tests in CI (successful on run 38554210778)
 - [ ] Add explicit database migration/reset approach
 
 ## Phase 2 — Core monitoring
@@ -32,10 +32,10 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Initial back
 
 ## Phase 3 — AI integration
 - [ ] Evaluate current providers and costs
-- [ ] Implement provider-independent analysis service
+- [ ] Implement provider-independent LLM analysis service (deterministic fallback implemented)
 - [ ] Structured and validated model output
 - [ ] Executive summaries
-- [ ] Transparent fallback path
+- [x] Implement transparent deterministic fallback baseline (requires quality evaluation)
 - [ ] Optional local Ollama adapter
 
 ## Phase 4 — Optimization
