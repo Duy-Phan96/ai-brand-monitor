@@ -42,6 +42,12 @@ To seed five fictional example mentions in an **empty** database (from `backend/
 python -m scripts.seed_demo
 ```
 
+To deliberately restore the fictional demo dataset from the repository (deletes existing sample rows; refuses when non-sample rows exist):
+
+```bash
+python -m scripts.reset_demo --confirm
+```
+
 The SQLite database is stored under `backend/data/ai_brand_monitor.db` by default when starting in `backend/`. Override with `BRAND_MONITOR_DB_PATH`. Running the seed against a non-empty database leaves existing data untouched.
 
 Frontend:
