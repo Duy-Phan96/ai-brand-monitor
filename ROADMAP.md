@@ -43,7 +43,7 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and
 - [ ] Mobile polish
 - [ ] Accessibility review
 - [ ] Error/loading/empty states
-- [ ] Performance and classification-quality review
+- [ ] Complete classification-quality review (initial offline evaluator created; larger dataset and live LLM comparison pending)
 
 ## Phase 5 — Quality assurance
 - [ ] Automated test suite
