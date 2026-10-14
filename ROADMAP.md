@@ -28,7 +28,7 @@ Phase 1 implementation is in progress on `feat/project-foundation`. Frontend and
 - [x] Combined search, filters and sorting (text, sentiment, platform, topic, priority, attention, dates; CI and browser verification tracked separately)
 - [x] Source-link behavior with missing-link fallback (browser verification pending)
 - [x] Manual fictional mention creation through backend API (browser QA pending)
-- [ ] Import/export
+- [x] Validated JSON batch import and JSON/CSV export (browser QA pending)
 
 ## Phase 3 — AI integration
 - [ ] Evaluate current providers and costs
