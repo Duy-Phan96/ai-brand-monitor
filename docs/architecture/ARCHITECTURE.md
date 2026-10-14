@@ -10,29 +10,38 @@ React + TypeScript + MUI
           |
 FastAPI + Pydantic
      |          |
-   SQLite    Analysis service
+   SQLite    Analysis service (planned)
                   |
-        deterministic fallback
+       deterministic fallback (planned)
                   |
-          optional LLM provider
+          optional LLM provider (planned)
 ```
 
 ## Responsibilities
 
 ### Frontend
-Responsible for presentation, navigation, filters, responsive interaction and user feedback.
+Responsible for presentation, navigation, filters, responsive interaction and user feedback. The current implementation is a shell only.
 
 ### Backend
-Owns API validation, persistence, analysis orchestration, import/export and all secret-bearing integrations.
+Owns API validation, persistence and eventually analysis orchestration, import/export and integrations.
 
 ### Storage
-SQLite is sufficient for the MVP because the demo is single-instance, low-volume and interview-oriented. The data layer should remain replaceable.
+SQLite is sufficient for the MVP because the demo is single-instance, low-volume and interview-oriented. The current `mentions` table stores validated input fields and an optional serialized analysis. The database is initialized lazily. Migrations, normalized analysis data and advanced queries are future work.
+
+### API
+- `GET /api/health`: health check.
+- `GET /api/mentions`: list mentions newest first.
+- `GET /api/mentions/{id}`: retrieve a mention or 404.
+- `POST /api/mentions`: validate and store a mention.
+
+### Demo data
+`backend/data/sample_mentions.json` contains clearly fictional brand examples with missing source URLs rather than invented real posts. `python -m scripts.seed_demo` only seeds an empty database.
 
 ### AI analysis
-AI-specific logic must sit behind a provider-independent service interface. Structured responses are validated before persistence. The system must expose the analysis method so deterministic fallback cannot be mistaken for actual model inference.
+A provider-independent service is planned but not yet implemented. Structured responses must be validated before persistence. No synthetic inference is claimed to have been run.
 
 ## Security boundaries
-Imported mention content is untrusted. API inputs and model outputs are validated. Provider keys remain backend-only.
+Imported content is untrusted. API input is validated and SQL statements are parameterized. Provider keys must remain backend-only.
 
 ## Deployment
 Local reproducibility is the priority. Deployment is intentionally deferred until the MVP is stable.
