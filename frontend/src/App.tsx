@@ -9,6 +9,7 @@ import { fetchMentions, type Mention } from "./api";
 import { calculateMetrics, sentiments } from "./metrics";
 import { MentionFilters } from "./MentionFilters";
 import { MentionForm } from "./MentionForm";
+import { MentionTransfer } from "./MentionTransfer";
 import { defaultFilters, filterMentions } from "./filtering";
 
 const sentimentColor = {
@@ -116,6 +117,10 @@ export function App() {
               <Card variant="outlined"><CardContent>
                 <Typography variant="h6" gutterBottom>Add mention</Typography>
                 <MentionForm onCreated={() => load()} />
+              </CardContent></Card>
+              <Card variant="outlined"><CardContent>
+                <Typography variant="h6" gutterBottom>Import & export</Typography>
+                <MentionTransfer onImported={() => load()} />
               </CardContent></Card>
               <Card variant="outlined"><CardContent>
                 <Typography variant="h6" gutterBottom>Mentions</Typography>
