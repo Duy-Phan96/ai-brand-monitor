@@ -25,3 +25,24 @@ export async function fetchMentions(signal?: AbortSignal): Promise<Mention[]> {
   if (!response.ok) throw new Error(`API returned ${response.status}`);
   return (await response.json()) as Mention[];
 }
+
+export interface NewMention {
+  brand: string;
+  content: string;
+  platform: string;
+  published_at: string;
+  source_url: string | null;
+  is_sample: boolean;
+}
+
+export async function createMention(data: NewMention): Promise<Mention> {
+  const response = await fetch("/api/mentions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error(`Unable to create mention (HTTP ${response.status})`);
+  }
+  return (await response.json()) as Mention;
+}
