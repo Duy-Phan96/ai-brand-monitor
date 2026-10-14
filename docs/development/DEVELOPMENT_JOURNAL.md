@@ -96,3 +96,10 @@ This is intentionally not presented as an LLM. The limited heuristics can fail o
 - Tests cover reset repeatability and refusing destructive changes to non-sample data.
 - ADR 0007 records the choice of a CLI command over an unauthenticated destructive HTTP endpoint.
 - CI verification of the latest changes remains pending.
+
+## 2026-10-14 — Optional real-LLM integration
+- Added a Gemini REST adapter with a provider-selection entrypoint. The default mode stays deterministic.
+- FastAPI creation and import flows now invoke the analysis entrypoint, which optionally makes a server-side external request.
+- Added Pydantic validation, request timeout, model provenance set by the server, exception fallback and mocked integration tests.
+- No API key has been configured or committed. A live model call has not been demonstrated or claimed.
+- ADR 0008 records alternatives, financial/privacy trade-offs and verification gaps. CI must be checked for this commit.
