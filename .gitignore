@@ -4,6 +4,9 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+*.egg-info/
+.coverage
+htmlcov/
 
 # Node
 node_modules/
@@ -11,6 +14,7 @@ dist/
 coverage/
 playwright-report/
 test-results/
+*.tsbuildinfo
 
 # Environment
 .env
@@ -27,3 +31,12 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+*.db-*
+*.sqlite-*
+*.sqlite3-*
+
+# Local process logs, temporary files and editor backups
+*.log
+*.tmp
+*.bak
+*~
