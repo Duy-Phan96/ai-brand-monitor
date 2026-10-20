@@ -1,3 +1,9 @@
+import { UIError } from "./errors";
+export interface AnalysisText {
+  summary: string;
+  explanation: string;
+  suggested_action: string | null;
+}
 export interface MentionAnalysis {
   relevant: boolean;
   sentiment: "positive" | "negative" | "neutral" | "mixed";
@@ -9,6 +15,7 @@ export interface MentionAnalysis {
   suggested_action: string | null;
   method: "deterministic" | "llm" | "human";
   model_name: string | null;
+  localized_text?: { de: AnalysisText; en: AnalysisText } | null;
 }
 export interface Mention {
   id: number;
@@ -22,7 +29,7 @@ export interface Mention {
 }
 export async function fetchMentions(signal?: AbortSignal): Promise<Mention[]> {
   const response = await fetch("/api/mentions", { signal });
-  if (!response.ok) throw new Error(`API returned ${response.status}`);
+  if (!response.ok) throw new UIError("apiError", response.status);
   return (await response.json()) as Mention[];
 }
 
@@ -42,7 +49,7 @@ export async function createMention(data: NewMention): Promise<Mention> {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    throw new Error(`Unable to create mention (HTTP ${response.status})`);
+    throw new UIError("createHttp", response.status);
   }
   return (await response.json()) as Mention;
 }

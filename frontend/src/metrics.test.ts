@@ -23,3 +23,10 @@ describe("dashboard metrics", () => {
     expect(m.topics.support).toBe(1);
   });
 });
+
+
+it("groups activity by UTC day rather than local timestamp prefix", () => {
+  const mention = { id: 2, brand: "Aurora", content: "Example", platform: "Sample",
+    published_at: "2026-10-14T00:30:00+02:00", source_url: null, is_sample: true, analysis: null } as Mention;
+  expect(calculateMetrics([mention]).activity).toEqual({ "2026-10-13": 1 });
+});

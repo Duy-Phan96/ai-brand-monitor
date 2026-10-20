@@ -35,3 +35,13 @@ describe("combined mention filtering", () => {
     expect(mentions[0].id).toBe(1);
   });
 });
+
+
+it("uses UTC publication dates and chronological order across offsets", () => {
+  const base = { brand: "Aurora", content: "Example", platform: "Sample", source_url: null, is_sample: true, analysis: null };
+  const records = [
+    { ...base, id: 1, published_at: "2026-10-14T00:30:00+02:00" },
+    { ...base, id: 2, published_at: "2026-10-13T23:00:00Z" },
+  ];
+  expect(filterMentions(records, { ...defaultFilters, from: "2026-10-13", to: "2026-10-13", sort: "newest" }).map(m => m.id)).toEqual([2, 1]);
+});
