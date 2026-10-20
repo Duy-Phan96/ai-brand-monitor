@@ -9,7 +9,7 @@ The 10 fictional labels in `backend/data/evaluation_cases.json` cover straightfo
 ## Reproduction
 From `backend/` run `python -m scripts.evaluate_analysis`.
 
-The evaluator reports accuracy for relevance, sentiment, and action-required status as well as strict all-fields-per-case accuracy. These numbers apply only to the deterministic fallback, not the hosted LLM.
+The evaluator reports accuracy for relevance, sentiment, and action-required status as well as strict agreement across those three evaluated fields per case (not all analysis fields). These numbers apply only to the deterministic fallback, not the hosted LLM.
 
 ## Limitations
 English keyword rules do not reliably handle negation, sarcasm or German; a prompt-injection example does not establish general LLM security. Ten examples cannot support broad accuracy claims.

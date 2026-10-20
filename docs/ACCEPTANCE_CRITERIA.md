@@ -1,6 +1,6 @@
 # MVP Acceptance Criteria
 
-The MVP is acceptable for interview demonstration when all mandatory criteria below are verified.
+The MVP is acceptable for interview demonstration when all mandatory criteria below are verified. Automated release evidence does not substitute for product-owner acceptance; record manual results separately using the final audit checklist and current demo script. Publishing PR #1 does not imply manual sign-off.
 
 ## Analysis
 - Every mention has relevance, sentiment, topic, action-required status, priority, summary/explanation and analysis method.

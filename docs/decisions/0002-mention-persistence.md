@@ -16,7 +16,7 @@ Use the built-in sqlite3 library for initial persistence, Pydantic models for AP
 The implementation is easy to read, persists across restarts and supports isolated API tests. External links are null instead of fake URLs. The seed script leaves non-empty databases untouched.
 
 ## Trade-offs
-Serialized analysis JSON is not efficient for aggregated filtering. The current demo data is not classified yet; structured results will be added only when a real analysis implementation exists. The current initialization strategy does not replace versioned migrations.
+Serialized analysis JSON is not efficient for aggregated filtering. At this original decision point, demo data was not classified; structured results will be added only when a real analysis implementation exists. The current initialization strategy does not replace versioned migrations.
 
 ## Consequences
 Before the monitoring dashboard, decide how to query/filter analysis attributes; introduce migrations when the schema evolves. Maintain transparency of sample content and analysis method.
