@@ -62,3 +62,71 @@ def test_invalid_model_output_falls_back(monkeypatch):
 
     monkeypatch.setattr("app.services.llm.httpx.Client", FakeClient)
     assert analyze_mention("Aurora", "Aurora headphones").method == "deterministic"
+
+
+import json
+import pytest
+from app.services import llm
+
+
+@pytest.mark.parametrize("setting,expected", [(None, 45.0), ("60", 60.0)])
+def test_configurable_timeout(monkeypatch, setting, expected):
+    if setting is None:
+        monkeypatch.delenv("AI_TIMEOUT_SECONDS", raising=False)
+    else:
+        monkeypatch.setenv("AI_TIMEOUT_SECONDS", setting)
+    assert llm._request_timeout() == expected
+
+
+@pytest.mark.parametrize("setting", ["0", "-1", "nan", "inf", "bad"])
+def test_invalid_timeout_falls_back_before_request(monkeypatch, setting):
+    monkeypatch.setenv("AI_PROVIDER", "gemini")
+    monkeypatch.setenv("AI_API_KEY", "fake-test-only")
+    monkeypatch.setenv("AI_MODEL", "gemini-3.1-flash-lite")
+    monkeypatch.setenv("AI_TIMEOUT_SECONDS", setting)
+    result = analyze_mention("Aurora", "Aurora headphones are fantastic")
+    assert result.method == "deterministic"
+    assert "invalid_response_or_configuration" in result.explanation
+
+
+@pytest.mark.parametrize("kind,category", [
+    ("timeout", "timeout"), ("http", "http_error"),
+    ("transport", "transport_error"), ("invalid_json", "invalid_response_or_configuration"),
+    ("missing_candidates", "invalid_response_or_configuration"),
+    ("schema", "invalid_response_or_configuration"),
+    ("non_object", "invalid_response_or_configuration"),
+])
+def test_failure_categories_without_network(monkeypatch, caplog, kind, category):
+    monkeypatch.setenv("AI_PROVIDER", "gemini")
+    monkeypatch.setenv("AI_API_KEY", "fake-secret-not-for-logs")
+    monkeypatch.setenv("AI_MODEL", "gemini-3.1-flash-lite")
+    real_client = httpx.Client
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        if kind == "timeout":
+            raise httpx.ReadTimeout("fake-secret-not-for-logs", request=request)
+        if kind == "transport":
+            raise httpx.ConnectError("fake-secret-not-for-logs", request=request)
+        if kind == "http":
+            return httpx.Response(429, json={"error": "fake-secret-not-for-logs"})
+        if kind == "missing_candidates":
+            return httpx.Response(200, json={})
+        raw = {"invalid_json": "not json", "schema": '{"sentiment":"wrong"}',
+               "non_object": "[]"}[kind]
+        return httpx.Response(200, json={"candidates": [{"content": {"parts": [{"text": raw}]}}]})
+
+    def client(**kwargs):
+        assert kwargs["timeout"] == 45.0
+        assert kwargs["follow_redirects"] is False
+        return real_client(transport=httpx.MockTransport(handler), **kwargs)
+
+    monkeypatch.setattr(llm.httpx, "Client", client)
+    result = analyze_mention("Aurora", "Aurora headphones are fantastic")
+    assert result.method == "deterministic"
+    assert category in result.explanation
+    assert len(calls) == 1  # No retries, including quota errors.
+    assert "fake-secret-not-for-logs" not in caplog.text
+    if kind == "http":
+        assert "status=429" in caplog.text

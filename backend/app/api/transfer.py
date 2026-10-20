@@ -3,9 +3,9 @@ import io
 import json
 
 from fastapi import APIRouter, HTTPException, Response
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
-from app.schemas.mentions import Mention, MentionCreate
+from app.schemas.mentions import Mention, MentionImport
 from app.services.llm import analyze_mention
 from app.services.mentions import import_mentions, list_mentions
 
@@ -14,7 +14,9 @@ MAX_RECORDS = 500
 
 
 class ImportPayload(BaseModel):
-    mentions: list[MentionCreate] = Field(min_length=1, max_length=MAX_RECORDS)
+    model_config = ConfigDict(extra="forbid")
+
+    mentions: list[MentionImport] = Field(min_length=1, max_length=MAX_RECORDS)
 
 
 class ImportResult(BaseModel):
@@ -23,9 +25,7 @@ class ImportResult(BaseModel):
 
 @router.post("/import", response_model=ImportResult)
 def import_json(payload: ImportPayload) -> ImportResult:
-    # Deliberately force all imports to remain sample data in the MVP.
-    if any(not mention.is_sample for mention in payload.mentions):
-        raise HTTPException(status_code=422, detail="Only fictional sample records may be imported")
+    # The complete batch is validated before analysis or transactional insertion.
     records = [(m, analyze_mention(m.brand, m.content)) for m in payload.mentions]
     return ImportResult(imported=import_mentions(records))
 
@@ -50,7 +50,8 @@ def export_mentions(format: str = "json") -> Response:
         writer.writeheader()
         for mention in mentions:
             base = mention.model_dump(mode="json", exclude={"analysis"})
-            analysis = mention.analysis.model_dump(mode="json") if mention.analysis else {}
+            # Keep the established flat CSV contract; JSON retains both languages.
+            analysis = mention.analysis.model_dump(mode="json", exclude={"localized_text"}) if mention.analysis else {}
             record = {**base, **analysis}
             # Prevent CSV formula injection when exported data is opened in spreadsheets.
             for key, value in record.items():

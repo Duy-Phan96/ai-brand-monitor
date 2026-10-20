@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from scripts.reset_demo import reset_demo
+from app.core.database import connect, initialize_database
 
 client = TestClient(app)
 
@@ -23,11 +24,15 @@ def test_reset_is_reproducible():
 
 
 def test_reset_refuses_non_sample_data():
-    payload = {
-        "brand": "Aurora", "content": "Aurora headphones", "platform": "Manual",
-        "published_at": "2026-10-14T12:00:00Z", "is_sample": False,
-    }
-    assert client.post("/api/mentions", json=payload).status_code == 201
+    # Simulate a pre-policy row without reopening the prohibited write API.
+    initialize_database()
+    with connect() as connection:
+        connection.execute(
+            """INSERT INTO mentions
+            (brand, content, platform, published_at, is_sample)
+            VALUES (?, ?, ?, ?, ?)""",
+            ("Aurora", "Aurora headphones", "Legacy", "2026-10-14T12:00:00", 0),
+        )
     with pytest.raises(RuntimeError, match="non-sample"):
         reset_demo()
     assert len(client.get("/api/mentions").json()) == 1
