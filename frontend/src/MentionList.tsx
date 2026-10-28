@@ -1,3 +1,4 @@
+import { topicLabel } from "./i18n/topics";
 import { useTranslation } from "react-i18next";
 import { formatDate, formatNumber } from "./i18n";
 import {
@@ -137,7 +138,7 @@ export function MentionList({
                         {t(m.analysis.priority)}
                       </Typography>
                       <Typography variant="body2">
-                        <strong>{t("topicLabel")}</strong> {m.analysis.topic}
+                        <strong>{t("topicLabel")}</strong> {topicLabel(m.analysis.topic, t)}
                       </Typography>
                       <Typography variant="body2">
                         <strong>{t("relevanceLabel")}</strong>{" "}

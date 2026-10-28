@@ -4,6 +4,15 @@ All notable project changes are documented here.
 
 ## Unreleased — proposed v0.1.0 MVP
 
+### Security — 2026-10-28
+- Updated Vitest and matched @vitest packages, including @vitest/mocker, from 4.1.11 to 4.1.12 to fix GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp.
+- Regenerated the lockfile without overrides, major upgrades or application/localization changes. Full and production-only npm audits report zero vulnerabilities; see docs/testing/DEPENDENCY_SECURITY_AUDIT.md for verification.
+
+### Fixed — 2026-10-28
+- Centralized predefined topic labels across statistics, filters and mention details: Produktfeedback, Nicht relevant, Kundenservice and Allgemein in German; original labels in English.
+- Switching preserves topic identifiers and expanded details without requests or stored-analysis/API changes. Unknown topics display verbatim.
+- Added DE/EN unit and desktop/mobile browser regressions; see docs/testing/TOPIC_LOCALIZATION_QA.md.
+
 ### Release preparation
 - Complete previously local implementation, regression suites, language catalogs, screenshots and ADR/QA evidence are prepared for PR #1 rather than a duplicate PR.
 - Cross-platform Playwright Python selection, lockfile-based CI installation and dedicated Chromium E2E/release-hygiene jobs.

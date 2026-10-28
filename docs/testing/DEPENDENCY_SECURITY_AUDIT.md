@@ -2,7 +2,39 @@
 
 > Historical milestone report. Current 2026-10-20 verification and limitations: [P1_FIX_VERIFICATION.md](P1_FIX_VERIFICATION.md). Earlier counts/pending/advisory statements apply to their dated milestone only. That milestone was local/uncommitted; publication status is now tracked in docs/releases/RELEASE_PREPARATION.md.
 
-## Outcome
+## PR #2 follow-up — 2026-10-28
+
+The 4.1.11 result below is historical and is superseded by this patch remediation. Current tree: Vitest **4.1.12**, @vitest/mocker **4.1.12**, Vite **6.4.4**. `package.json` requires Vitest `^4.1.12`; the regenerated lockfile pins the matched Vitest packages to 4.1.12.
+
+Before audit: **2 moderate affected-package findings** (mocker plus propagation to Vitest), encompassing these two advisories:
+
+- [GHSA-qxg6-89mg-rqv8](https://github.com/advisories/GHSA-qxg6-89mg-rqv8): unauthenticated manual mock registration can inject generated module code when an attacker can reach the development server.
+- [GHSA-xp26-3454-mjgp](https://github.com/advisories/GHSA-xp26-3454-mjgp): Windows backslash traversal bypasses the earlier redirect allowlist fix.
+
+Both maintainer advisories identify 4.1.12 and 5.0.3 as patched. Chose the smallest 4.x patch, keeping the version-matched internal packages together through Vitest's own dependencies. A Vitest 5 migration, transitive overrides, adding mocker as a direct dependency and relaxing the audit threshold were unnecessary. Registry metadata accepts Vite 6 and Node 22 used by CI (engines: ^20 || ^22 || >=24).
+
+`npm install --save-dev vitest@4.1.12` changed only vitest and seven matched @vitest packages (expect, mocker, pretty-format, runner, snapshot, spy, utils); all moved 4.1.11→4.1.12. Other package versions remain unchanged. Application localization code/tests/contracts remain unchanged. The low audit threshold remains enforced.
+
+Local verification after clean `npm ci` (Node 24.14.0 / npm 11.9.0):
+
+| Check | Result |
+|---|---|
+| `npm ci` | Passed; reproduced the patched lockfile |
+| `npm test` | 22 passed, 6 files, Vitest 4.1.12 |
+| `npm run build` | Passed; unchanged index-CJTAsVJx.js (502.71 kB / 157.52 kB gzip) |
+| `npm run test:e2e` | 36 passed, desktop/mobile Chromium, 1.5m, zero retries |
+| `npm audit --audit-level=low` | 0 vulnerabilities |
+| `npm audit --omit=dev` | 0 vulnerabilities |
+| Release-check self-test/history scan | Passed, zero findings |
+| `git diff --check` | Passed |
+
+All existing DE/EN topic, state-retention, request-free switching, analysis, input/export and accessibility scenarios passed without changing tests or product sources. The existing Vite chunk-size and Playwright color-environment warnings remain. No new local backend test run was needed for this frontend tooling-only patch; the pushed-head CI backend job remains required.
+
+CI evidence: previous run [40698963742](https://github.com/Duy-Phan96/ai-brand-monitor/actions/runs/40698963742) failed only the frontend low-threshold audit after passing its build/tests. The patch will be pushed to the same PR #2; current-head Actions results must be checked after pushing and reported separately, rather than inferred from local success.
+
+No live Gemini requests, secret exposure, merge or deployment. Tests retain isolated fictional data and blocked external application traffic. An audit with zero findings records currently known registry advisories, not a general security certification. For an interview, explain why a patch dependency update repaired CI without changing the localized product behavior; show the audit and topic-switch regression.
+
+## Historical outcome — 2026-10-14
 Full npm audit: **6 affected-package findings before, 0 after**. Before: 3 moderate, 1 high, 2 critical. These include dependency-chain propagation, not six independent CVEs. Production-only audit (`npm audit --omit=dev`): **0 before and after**. All affected packages were in development tooling.
 
 ## Affected paths and potential impact

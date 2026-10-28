@@ -159,5 +159,9 @@
   "analysisDerivedText": "Lokalisierte Darstellung aus Klassifikationsfeldern; keine Übersetzung der ursprünglichen Freitexte. Die Empfehlung ist eine allgemeine Prüfhilfe.",
   "analysisOriginal": "Ursprüngliche Analyse anzeigen (unübersetzt)",
   "analysisSummaryLabel": "Zusammenfassung:",
-  "analysisQuestionAction": "Beantworten Sie die Frage oder stellen Sie eine passende Informationsquelle bereit."
+  "analysisQuestionAction": "Beantworten Sie die Frage oder stellen Sie eine passende Informationsquelle bereit.",
+  "topicProductFeedback": "Produktfeedback",
+  "topicUnrelated": "Nicht relevant",
+  "topicSupport": "Kundenservice",
+  "topicGeneral": "Allgemein"
 }

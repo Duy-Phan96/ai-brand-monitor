@@ -159,5 +159,9 @@
   "analysisDerivedText": "Localized view of classification fields; not a translation of the original free text. The recommendation is general review guidance.",
   "analysisOriginal": "View original analysis (untranslated)",
   "analysisSummaryLabel": "Summary:",
-  "analysisQuestionAction": "Answer the user's question or provide a relevant resource."
+  "analysisQuestionAction": "Answer the user's question or provide a relevant resource.",
+  "topicProductFeedback": "product feedback",
+  "topicUnrelated": "unrelated",
+  "topicSupport": "support",
+  "topicGeneral": "general"
 }

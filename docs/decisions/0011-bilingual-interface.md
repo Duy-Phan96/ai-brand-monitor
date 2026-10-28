@@ -4,6 +4,8 @@
 ADR 0013 extends the original interface-only scope: saved bilingual model text follows the UI language; older/rule analyses use explicitly labeled local classification descriptions. Original content/analysis and provenance remain unchanged. No inference or API request occurs on switching. The source-data display boundary below records the original milestone and is superseded for displayed analysis wording.
 
 ## Context
+
+Follow-up (2026-10-28): predefined topics now use `frontend/src/i18n/topics.ts` and bundled catalogs, superseding the untranslated-topic display boundary below. Exact matching preserves identifiers; unknown provider topics remain verbatim. Only labels change; option values, React keys, comparisons and storage remain language-independent. An explicit allowlist prevents arbitrary provider strings from becoming translation keys. No backend translation, migration or model call. See `docs/testing/TOPIC_LOCALIZATION_QA.md`.
 The ATZ interview needs a natural German business interface while preserving the original English interface and demonstrable engineering behavior. UI labels, errors and accessibility text must switch without discarding filters, drafts or expanded workflows.
 
 ## Alternatives
