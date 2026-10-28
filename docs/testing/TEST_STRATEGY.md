@@ -4,6 +4,8 @@
 See `docs/releases/RELEASE_PREPARATION.md` for the release candidate, fresh checks, CI responsibilities and publication boundary. CI now uses npm ci and runs isolated Chromium plus dependency-free release hygiene/history signature checks; older platform/count statements below are dated evidence.
 
 ## Current verification
+
+Topic-label follow-up (2026-10-28): see [TOPIC_LOCALIZATION_QA.md](TOPIC_LOCALIZATION_QA.md) for shared-label unit tests and desktop/mobile coverage of statistics, options, selected filters and expanded details. Tests cover all predefined identifiers, exact unknown fallback, state retention and zero requests during switching.
 See [ANALYSIS_LANGUAGE_QA.md](ANALYSIS_LANGUAGE_QA.md) for latest language-display results and [P1_FIX_VERIFICATION.md](P1_FIX_VERIFICATION.md) for earlier contract regressions. New checks verify single mocked bilingual generation, legacy JSON preservation, localized rules/legacy wording, saved selection and zero browser API requests on switching; original/classification/provenance remain unchanged. The dated execution records below are historical; earlier test counts, advisory statuses and packaging-pending statements do not describe the latest working tree. Committed HEAD CI success was verified in the final audit, not for the current local changes.
 
 ## Goals

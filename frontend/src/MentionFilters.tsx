@@ -1,3 +1,4 @@
+import { topicLabel } from "./i18n/topics";
 import { useTranslation } from "react-i18next";
 import { formatNumber } from "./i18n";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
@@ -139,7 +140,9 @@ export function MentionFilters({
                         <MenuItem key={value} value={value}>
                           {key === "sentiment" || key === "priority"
                             ? t(value)
-                            : value}
+                            : key === "topic"
+                              ? topicLabel(value, t)
+                              : value}
                         </MenuItem>
                       ))}
                     </Select>

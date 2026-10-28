@@ -1,3 +1,4 @@
+import { topicLabel } from "./i18n/topics";
 import { useTranslation } from "react-i18next";
 import { formatDate, formatNumber } from "./i18n";
 import {
@@ -256,7 +257,7 @@ export function DashboardInsights({
                       >
                         0{index + 1}
                       </Box>
-                      {topic}
+                      {topicLabel(topic, t)}
                     </Typography>
                     <Typography variant="body2" fontWeight={650}>
                       {formatNumber(count)}

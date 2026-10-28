@@ -1,6 +1,8 @@
 # Roadmap
 
 ## Current status
+
+2026-10-28 follow-up: predefined topics now use shared DE/EN display labels across statistics, filters and details, preserving stored identifiers and request-free switching. See `docs/testing/TOPIC_LOCALIZATION_QA.md` for verification. The foundation publication paragraph below records the previous milestone; PR #1 has since merged into main.
 The complete fictional-data MVP is prepared for synchronization through PR #1 on `feat/project-foundation`; the owner will review and merge separately. Release validation and remaining limitations are recorded in `docs/releases/RELEASE_PREPARATION.md`. Personal acceptance, final presentation and a stable tag remain pending; publication is not acceptance.
 
 Local baseline: 122 backend tests, 18 frontend tests and 34 desktop/mobile Chromium cases; see the release report for freshly executed results. CI now includes backend, lockfile-based frontend build/tests/audit, Linux Chromium E2E and release hygiene/history signature scanning. Only successful checks on the current PR head authorize calling that head CI-verified.

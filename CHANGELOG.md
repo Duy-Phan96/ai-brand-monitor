@@ -4,6 +4,11 @@ All notable project changes are documented here.
 
 ## Unreleased — proposed v0.1.0 MVP
 
+### Fixed — 2026-10-28
+- Centralized predefined topic labels across statistics, filters and mention details: Produktfeedback, Nicht relevant, Kundenservice and Allgemein in German; original labels in English.
+- Switching preserves topic identifiers and expanded details without requests or stored-analysis/API changes. Unknown topics display verbatim.
+- Added DE/EN unit and desktop/mobile browser regressions; see docs/testing/TOPIC_LOCALIZATION_QA.md.
+
 ### Release preparation
 - Complete previously local implementation, regression suites, language catalogs, screenshots and ADR/QA evidence are prepared for PR #1 rather than a duplicate PR.
 - Cross-platform Playwright Python selection, lockfile-based CI installation and dedicated Chromium E2E/release-hygiene jobs.

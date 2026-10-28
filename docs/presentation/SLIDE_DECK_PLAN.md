@@ -96,3 +96,7 @@ Evidence: 39 backend, 10 frontend, 12 browser tests pass; production build and z
 Demonstrate DE/EN switching with active filters, an open analysis and a fictional draft. Labels/messages/date formats change; user content and stored analysis do not. Language alone persists after reload. Explain the local bundled catalog design, no external translation request, and the English-only deterministic classifier.
 
 Evidence: 39 backend, 14 frontend and 22 desktop/mobile browser tests pass, build/pip check pass, npm audit 0, tested en/de axe and 320/390/768/1440 layouts pass. README now documents the actual MVP. Bilingual screenshots are reusable in the later PowerPoint; exports remain pending. See ADR 0011 and docs/testing/LOCALIZATION_QA.md for limits and browser-native chrome behavior.
+
+
+## Topic-label demonstration follow-up — 2026-10-28
+Show Produktfeedback / Nicht relevant / Kundenservice / Allgemein in German statistics, then select Kundenservice and expand its mention. Switch EN→DE: labels follow the UI while the selected identifier remains `support`, details stay open and no request occurs. Explain the shared catalog helper, unknown-topic verbatim fallback and unchanged analysis storage/API. This is display localization, not multilingual classifier-quality evidence. Verification: `docs/testing/TOPIC_LOCALIZATION_QA.md`; no deck/PDF was generated for this focused fix.
