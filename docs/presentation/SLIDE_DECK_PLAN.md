@@ -100,3 +100,7 @@ Evidence: 39 backend, 14 frontend and 22 desktop/mobile browser tests pass, buil
 
 ## Topic-label demonstration follow-up — 2026-10-28
 Show Produktfeedback / Nicht relevant / Kundenservice / Allgemein in German statistics, then select Kundenservice and expand its mention. Switch EN→DE: labels follow the UI while the selected identifier remains `support`, details stay open and no request occurs. Explain the shared catalog helper, unknown-topic verbatim fallback and unchanged analysis storage/API. This is display localization, not multilingual classifier-quality evidence. Verification: `docs/testing/TOPIC_LOCALIZATION_QA.md`; no deck/PDF was generated for this focused fix.
+
+
+## PR #2 dependency-security explanation — 2026-10-28
+Explain the audit failure from two newly reported mocker advisories, the minimal Vitest/@vitest/mocker 4.1.11→4.1.12 patch and matched internal dependencies. Keep Vite 6.4.4 and product/localization behavior unchanged. Demonstrate the clean audit and existing DE/EN topic-switch regression; distinguish local verification from checks on the pushed PR head. Evidence: `docs/testing/DEPENDENCY_SECURITY_AUDIT.md`. No live Gemini request is needed.

@@ -4,6 +4,10 @@ All notable project changes are documented here.
 
 ## Unreleased — proposed v0.1.0 MVP
 
+### Security — 2026-10-28
+- Updated Vitest and matched @vitest packages, including @vitest/mocker, from 4.1.11 to 4.1.12 to fix GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp.
+- Regenerated the lockfile without overrides, major upgrades or application/localization changes. Full and production-only npm audits report zero vulnerabilities; see docs/testing/DEPENDENCY_SECURITY_AUDIT.md for verification.
+
 ### Fixed — 2026-10-28
 - Centralized predefined topic labels across statistics, filters and mention details: Produktfeedback, Nicht relevant, Kundenservice and Allgemein in German; original labels in English.
 - Switching preserves topic identifiers and expanded details without requests or stored-analysis/API changes. Unknown topics display verbatim.

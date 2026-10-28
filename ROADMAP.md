@@ -2,6 +2,8 @@
 
 ## Current status
 
+2026-10-28 security follow-up: PR #2 uses Vitest/@vitest/mocker 4.1.12 for the two mocker advisories, with localization behavior unchanged. Current dependency evidence is in `docs/testing/DEPENDENCY_SECURITY_AUDIT.md`; older 4.1.11 audit results are historical.
+
 2026-10-28 follow-up: predefined topics now use shared DE/EN display labels across statistics, filters and details, preserving stored identifiers and request-free switching. See `docs/testing/TOPIC_LOCALIZATION_QA.md` for verification. The foundation publication paragraph below records the previous milestone; PR #1 has since merged into main.
 The complete fictional-data MVP is prepared for synchronization through PR #1 on `feat/project-foundation`; the owner will review and merge separately. Release validation and remaining limitations are recorded in `docs/releases/RELEASE_PREPARATION.md`. Personal acceptance, final presentation and a stable tag remain pending; publication is not acceptance.
 
